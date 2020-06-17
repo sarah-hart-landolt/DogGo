@@ -8,11 +8,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
-namespace DogGo.Controllers
+namespace Doggo.Controllers
 {
     public class OwnersController : Controller
     {
-        // GET: OwnersController1
+        private readonly OwnerRepository _ownerRepo;
+        private readonly DogRepository _dogRepo;
+
+        public OwnersController(IConfiguration config)
+        {
+            _ownerRepo = new OwnerRepository(config);
+            _dogRepo = new DogRepository(config);
+        }
+
+        // GET: OwnersController
         public ActionResult Index()
         {
             List<Owner> owners = _ownerRepo.GetAllOwners();
@@ -20,7 +29,7 @@ namespace DogGo.Controllers
             return View(owners);
         }
 
-        // GET: OwnersController1/Details/5
+        // GET: OwnersController/Details/5
         public ActionResult Details(int id)
         {
             Owner owner = _ownerRepo.GetOwnerById(id);
@@ -30,78 +39,83 @@ namespace DogGo.Controllers
                 return NotFound();
             }
 
+            owner.Dogs = _dogRepo.GetDogsByOwnerId(id);
+
             return View(owner);
         }
 
-        // GET: OwnersController1/Create
+        // GET: OwnersController/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: OwnersController1/Create
+        // POST: OwnersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Owner owner)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _ownerRepo.AddOwner(owner);
+
+                return RedirectToAction("Index");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                // If something goes wrong, just keep the user on the same page so they can try again
+                return View(owner);
             }
         }
 
-        // GET: OwnersController1/Edit/5
+        // GET: Owners/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            Owner owner = _ownerRepo.GetOwnerById(id);
+
+            return View(owner);
         }
 
-        // POST: OwnersController1/Edit/5
+        // POST: OwnersController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Edit(int id, Owner owner)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _ownerRepo.UpdateOwner(owner);
+
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                return View(owner);
             }
         }
 
-        // GET: OwnersController1/Delete/5
+        // GET: OwnersController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Owner owner = _ownerRepo.GetOwnerById(id);
+            return View(owner);
         }
 
-        // POST: OwnersController1/Delete/5
+        // POST: OwnersController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Owner owner)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                _ownerRepo.DeleteOwner(id);
+
+                return RedirectToAction("Index");
             }
             catch
             {
-                return View();
+                // If something goes wrong, just keep the user on the same page so they can try again
+                return View(owner);
             }
-        }
-
-        private readonly OwnerRepository _ownerRepo;
-
-        // The constructor accepts an IConfiguration object as a parameter. This class comes from the ASP.NET framework and is useful for retrieving things out of the appsettings.json file like connection strings.
-        public OwnersController(IConfiguration config)
-        {
-            _ownerRepo = new OwnerRepository(config);
         }
     }
 }
