@@ -1,24 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using DogGo.Models;
 using DogGo.Models.ViewModels;
 using DogGo.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 
 namespace DogGo.Controllers
 {
+    [Authorize]
+
     public class WalkersController : Controller
     {
         // GET: WalkersController
         public ActionResult Index()
         {
-            List<Walker> walkers = _walkerRepo.GetAllWalkers();
+            Nullable<int> i = null;
+            i = GetCurrentUserId();
 
-            return View(walkers);
+            if (i != null)
+
+            {
+
+                Owner owner = _ownerRepo.GetOwnerById(i.Value);
+                List<Walker> walkers = _walkerRepo.GetWalkersInNeighborhood(owner.NeighborhoodId);
+
+                return View(walkers);
+            }
+            else
+            {
+                List<Walker> walkers = _walkerRepo.GetAllWalkers();
+
+                return View(walkers);
+            }
+
         }
 
         // GET: WalkersController/Details/5
@@ -32,7 +52,7 @@ namespace DogGo.Controllers
             {
                 Walker = walker,
                 Walks = walks,
-                Total= total
+                Total = total
             };
 
             return View(vm);
@@ -103,12 +123,21 @@ namespace DogGo.Controllers
 
         private readonly WalkerRepository _walkerRepo;
         private readonly WalkRepository _walkRepo;
+        private readonly OwnerRepository _ownerRepo;
+
 
         // The constructor accepts an IConfiguration object as a parameter. This class comes from the ASP.NET framework and is useful for retrieving things out of the appsettings.json file like connection strings.
         public WalkersController(IConfiguration config)
         {
             _walkerRepo = new WalkerRepository(config);
             _walkRepo = new WalkRepository(config);
+            _ownerRepo = new OwnerRepository(config);
+        }
+
+        private int GetCurrentUserId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }

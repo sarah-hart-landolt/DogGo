@@ -216,39 +216,27 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                    INSERT INTO Dog ([Name], Breed, Notes, ImageUrl, OwnerId)
-                    OUTPUT INSERTED.Id
-                    VALUES (@name, @breed, @notes, @imageUrl, @ownerId);
-                ";
+            INSERT INTO Dog (Name, Breed, OwnerId, Notes, ImageUrl)
+            VALUES (@name, @breed, @ownerId, @notes, @imageUrl)
+            ";
 
                     cmd.Parameters.AddWithValue("@name", dog.Name);
                     cmd.Parameters.AddWithValue("@breed", dog.Breed);
-                    if (dog.Notes == null)
-                    {
-                        cmd.Parameters.AddWithValue("@notes", DBNull.Value);
-                    }
-                    else
-                    {
-                        cmd.Parameters.AddWithValue("@notes", dog.Notes);
-                    }
-                    if (dog.ImageUrl == null)
-                    {
-                        cmd.Parameters.AddWithValue("@imageUrl", DBNull.Value);
-                    }
-                    else
-                    {
-                        cmd.Parameters.AddWithValue("@imageUrl", dog.ImageUrl);
-                    }
                     cmd.Parameters.AddWithValue("@ownerId", dog.OwnerId);
 
-                    int id = (int)cmd.ExecuteScalar();
+                    // nullable columns
+                    cmd.Parameters.AddWithValue("@notes", dog.Notes ?? "");
+                    cmd.Parameters.AddWithValue("@imageUrl", dog.ImageUrl ?? "");
 
-                    dog.Id = id;
+                    int newlyCreatedId = (int)cmd.ExecuteScalar();
+
+                    dog.Id = newlyCreatedId;
+
                 }
             }
         }
-    
-    
+
+
         public void UpdateDog(Dog dog)
         {
             using (SqlConnection conn = Connection)
