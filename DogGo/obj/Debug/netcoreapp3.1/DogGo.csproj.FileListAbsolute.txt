@@ -126,7 +126,6 @@ C:\Users\sarah\workspace\DogGo\DogGo\bin\Debug\netcoreapp3.1\tr\Microsoft.CodeAn
 C:\Users\sarah\workspace\DogGo\DogGo\bin\Debug\netcoreapp3.1\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\sarah\workspace\DogGo\DogGo\bin\Debug\netcoreapp3.1\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\sarah\workspace\DogGo\DogGo\obj\Debug\netcoreapp3.1\Razor\Views\Walkers\Index.cshtml.g.cs
-C:\Users\sarah\workspace\DogGo\DogGo\obj\Debug\netcoreapp3.1\Razor\Views\Walkers\Details.cshtml.g.cs
 C:\Users\sarah\workspace\DogGo\DogGo\obj\Debug\netcoreapp3.1\Razor\Views\Owners\Index.cshtml.g.cs
 C:\Users\sarah\workspace\DogGo\DogGo\obj\Debug\netcoreapp3.1\Razor\Views\Owners\Details.cshtml.g.cs
 C:\Users\sarah\workspace\DogGo\DogGo\obj\Debug\netcoreapp3.1\Razor\Views\Owners\Create.cshtml.g.cs
@@ -416,3 +415,4 @@ C:\Users\sarah\workspace\DogGo\DogGo\obj\Debug\netcoreapp3.1\Razor\Views\Dog\Det
 C:\Users\sarah\workspace\DogGo\DogGo\obj\Debug\netcoreapp3.1\Razor\Views\Dog\Create.cshtml.g.cs
 C:\Users\sarah\workspace\DogGo\DogGo\obj\Debug\netcoreapp3.1\Razor\Views\Dog\Edit.cshtml.g.cs
 C:\Users\sarah\workspace\DogGo\DogGo\obj\Debug\netcoreapp3.1\Razor\Views\Dog\Delete.cshtml.g.cs
+C:\Users\sarah\workspace\DogGo\DogGo\obj\Debug\netcoreapp3.1\Razor\Views\Walkers\Details.cshtml.g.cs
