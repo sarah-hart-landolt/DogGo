@@ -94,9 +94,10 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT Id, [Name], Breed, Notes, ImageUrl, OwnerId 
-                        FROM Dog
-                        WHERE OwnerId = @ownerId
+                        SELECT d.Id, d.[Name], d.Breed, d.Notes, d.ImageUrl, d.OwnerId, o.[Name] AS OwnerName
+                        FROM Dog d
+                        JOIN Owner o ON o.id = d.OwnerId
+                        WHERE d.OwnerId = @ownerId
                     ";
 
                     cmd.Parameters.AddWithValue("@ownerId", ownerId);
@@ -114,7 +115,11 @@ namespace DogGo.Repositories
                             OwnerId = reader.GetInt32(reader.GetOrdinal("OwnerId")),
                             Breed = reader.GetString(reader.GetOrdinal("Breed")),
                             Notes = ReaderHelpers.GetNullableString(reader, "Notes"),
-                            ImageUrl = ReaderHelpers.GetNullableString(reader, "ImageUrl")
+                            ImageUrl = ReaderHelpers.GetNullableString(reader, "ImageUrl"),
+                            Owner = new Owner
+                            {
+                                Name= reader.GetString(reader.GetOrdinal("OwnerName")),
+                            }
                         };
 
 
@@ -216,7 +221,8 @@ namespace DogGo.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-            INSERT INTO Dog (Name, Breed, OwnerId, Notes, ImageUrl)
+            INSERT INTO Dog (Name, Breed, OwnerId, Notes, ImageUrl )
+            OUTPUT INSERTED.ID
             VALUES (@name, @breed, @ownerId, @notes, @imageUrl)
             ";
 
@@ -228,9 +234,9 @@ namespace DogGo.Repositories
                     cmd.Parameters.AddWithValue("@notes", dog.Notes ?? "");
                     cmd.Parameters.AddWithValue("@imageUrl", dog.ImageUrl ?? "");
 
-                    int newlyCreatedId = (int)cmd.ExecuteScalar();
+                    int id = (int)cmd.ExecuteScalar();
 
-                    dog.Id = newlyCreatedId;
+                    dog.Id = id;
 
                 }
             }
