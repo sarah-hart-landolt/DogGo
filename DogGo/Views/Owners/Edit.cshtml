@@ -1,6 +1,5 @@
 ﻿@model DogGo.Models.ViewModels.OwnerFormViewModel
 
-
 @{
     ViewData["Title"] = "Edit";
 }
@@ -11,8 +10,9 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Owner.Id" type="hidden" class="form-control" />
             <div class="form-group">
                 <label asp-for="Owner.Email" class="control-label"></label>
                 <input asp-for="Owner.Email" class="form-control" />
@@ -24,25 +24,19 @@
                 <span asp-validation-for="Owner.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Owner.Phone" class="control-label"></label>
-                <input asp-for="Owner.Phone" class="form-control" />
-                <span asp-validation-for="Owner.Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Owner.Address" class="control-label"></label>
                 <input asp-for="Owner.Address" class="form-control" />
                 <span asp-validation-for="Owner.Address" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Owner.NeighborhoodId" class="control-label"></label>
-                <select asp-for="Owner.NeighborhoodId" class="form-control">
-                    <option value="">Select Neighborhood</option>
-                    @foreach (Neighborhood neighborhood in Model.Neighborhoods)
-                    {
-                        <option value="@neighborhood.Id">@neighborhood.Name</option>
-                    }
-                </select>
+                <input asp-for="Owner.NeighborhoodId" class="form-control" />
                 <span asp-validation-for="Owner.NeighborhoodId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Owner.Phone" class="control-label"></label>
+                <input asp-for="Owner.Phone" class="form-control" />
+                <span asp-validation-for="Owner.Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

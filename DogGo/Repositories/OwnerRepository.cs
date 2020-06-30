@@ -173,8 +173,7 @@ namespace DogGo.Repositories
                     cmd.CommandText = @"
                     INSERT INTO Owner ([Name], Email, Phone, Address, NeighborhoodId)
                     OUTPUT INSERTED.ID
-                    VA@model DogGo.Models.ViewModels.OwnerFormViewModel
-LUES (@name, @email, @phoneNumber, @address, @neighborhoodId);
+                    VALUES(@name, @email, @phoneNumber, @address, @neighborhoodId);
                 ";
 
                     cmd.Parameters.AddWithValue("@name", owner.Name);

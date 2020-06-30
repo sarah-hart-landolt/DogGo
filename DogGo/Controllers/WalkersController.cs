@@ -13,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 
 namespace DogGo.Controllers
 {
-    [Authorize]
 
     public class WalkersController : Controller
     {
@@ -49,7 +48,7 @@ namespace DogGo.Controllers
             int total = walks.Sum(walk => walk.Duration);
 
             WalkerViewModel vm = new WalkerViewModel()
-            {
+            {                               
                 Walker = walker,
                 Walks = walks,
                 Total = total

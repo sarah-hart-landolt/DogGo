@@ -8,6 +8,7 @@ using DogGo.Models.ViewModels;
 using DogGo.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +36,7 @@ namespace Doggo.Controllers
         }
 
         // GET: OwnersController
+
         public ActionResult Index()
         {
             List<Owner> owners = _ownerRepo.GetAllOwners();
@@ -60,6 +62,8 @@ namespace Doggo.Controllers
         }
 
         // GET: OwnersController/Create
+
+        [Authorize]
         public ActionResult Create()
         {
             List<Neighborhood> neighborhoods = _neighborhoodRepo.GetAll();
@@ -76,18 +80,19 @@ namespace Doggo.Controllers
         // POST: OwnersController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Owner owner)
+        public ActionResult Create(OwnerFormViewModel vm)
         {
             try
             {
-                _ownerRepo.AddOwner(owner);
+                _ownerRepo.AddOwner(vm.Owner);
 
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
+                vm.Neighborhoods = _neighborhoodRepo.GetAll();
                 // If something goes wrong, just keep the user on the same page so they can try again
-                return View(owner);
+                return View(vm);
             }
         }
 
