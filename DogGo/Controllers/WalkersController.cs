@@ -47,6 +47,7 @@ namespace DogGo.Controllers
             List<Walk> walks = _walkRepo.GetWalksByWalkerId(walker.Id);
             int total = walks.Sum(walk => walk.Duration);
 
+
             WalkerViewModel vm = new WalkerViewModel()
             {                               
                 Walker = walker,

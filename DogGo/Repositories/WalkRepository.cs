@@ -37,11 +37,12 @@ namespace DogGo.Repositories
                             w.Date, 
                             w.WalkerId, 
                             w.DogId,
+                            w.Duration,
                             o.Name
-                        FROM Walk w
+                        FROM Walks w
                         JOIN Walker ker ON ker.Id = w.WalkerId
                         JOIN Dog d ON d.Id= w.DogId
-                        JOIN Owner o ON o.id = dog.OwnerId
+                        JOIN Owner o ON o.id = d.OwnerId
                     ";
 
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -53,6 +54,7 @@ namespace DogGo.Repositories
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Date = reader.GetDateTime(reader.GetOrdinal("Date")),
+                            Duration = reader.GetInt32(reader.GetOrdinal("Duration")),
                             WalkerId = reader.GetInt32(reader.GetOrdinal("WalkerId")),
                             DogId = reader.GetInt32(reader.GetOrdinal("DogId"))
                         };
